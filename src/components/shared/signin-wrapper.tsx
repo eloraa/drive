@@ -16,17 +16,20 @@ const Signin = () => {
   const { data: session, status } = useSession();
   const [dots, setDots] = useState('');
 
-  
-
   useEffect(() => {
-    console.log(session, status);
     if (!(status === 'loading') && !session) void signIn('google');
     if (session && window.opener && window.opener !== window) {
+      const openerWindow = window.opener as Window & {
+        onLoginSuccess?: () => void;
+      };
+      if (openerWindow.onLoginSuccess) {
+        openerWindow.onLoginSuccess();
+      }
       window.close();
     }
-    // if (session && !window.opener && window.opener === window) {
-    //   redirect('/signin');
-    // }
+    if (status !== 'loading' && session && !window.opener) {
+      redirect('/signin');
+    }
   }, [session, status]);
 
   useEffect(() => {

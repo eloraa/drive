@@ -3,14 +3,17 @@
 import { Button } from '../ui/button';
 import { forwardRef } from 'react';
 import { cn } from '@/lib/utils';
+import { useRouter } from 'next/navigation';
 
 type GoogleLoginProps = React.ComponentPropsWithoutRef<'button'> & {
-  onClick?: () => void,
-  className?: string,
+  onClick?: () => void;
+  className?: string;
 };
 
 export const GoogleLogin = forwardRef<HTMLButtonElement, GoogleLoginProps>(
   ({ className, onClick, ...props }, ref) => {
+    const router = useRouter();
+
     const popupCenter = (url: string, title: string) => {
       if (onClick) return onClick();
       const dualScreenLeft = window.screenLeft ?? window.screenX;
@@ -38,6 +41,10 @@ export const GoogleLogin = forwardRef<HTMLButtonElement, GoogleLoginProps>(
           650 / systemZoom
         },top=${top},left=${left}`,
       );
+
+      window.onLoginSuccess = () => {
+        router.refresh();
+      };
 
       newWindow?.focus();
     };

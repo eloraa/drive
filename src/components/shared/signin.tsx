@@ -3,7 +3,7 @@
 import { ArrowLeft, ArrowRight, Mail } from 'lucide-react';
 import { Button } from '../ui/button';
 import { GoogleLogin } from './google-login';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Input } from '../ui/input';
 import { signIn } from 'next-auth/react';
@@ -12,12 +12,18 @@ export const Signin = () => {
   const [isEmail, setIsEmail] = useState(false);
   const sendMagicLink = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    const target = e.target as HTMLFormElement;
-    const email = target.email.value as string;
-    if (!email) return;
+    // const target = e.target as HTMLFormElement;
+    // const email = target.email.value as string;
+    // if (!email) return;
 
-    void signIn('email', { email });
+    // void signIn('email', { email });
   };
+
+  useEffect(() => {
+    if (window.opener) {
+      window.close();
+    }
+  }, []);
   return (
     <div className='flex gap-8 overflow-hidden p-2'>
       <div

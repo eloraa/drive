@@ -41,7 +41,7 @@ const OnetapRoot = ({ clientId }: { clientId: string }) => {
       window.google.accounts.id.prompt();
       isInitialized.current = true;
     }
-  }, [session, isLoading, clientId]);
+  }, [session, isLoading, clientId, status]);
 
   return <div id='googleonetap' />;
 };

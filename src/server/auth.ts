@@ -70,7 +70,7 @@ function parseCookies(cookieHeader: string): Record<string, string> {
 
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: ({ session, user, req }) => ({
+    session: ({ session, user }) => ({
       ...session,
       user: {
         ...session.user,

@@ -49,6 +49,8 @@ export const sendMail = async (params: EmailParams) => {
 
   const { city, country } = await getLocation(req);
 
+  console.log(IP(req), city, country, 'from send-mail.ts');
+
   const result = await transport.sendMail({
     to: identifier,
     from: provider.from,
@@ -66,8 +68,8 @@ export const sendMail = async (params: EmailParams) => {
       host,
       identifier,
       ip: IP(req),
-      city: req?.geo?.city ?? '',
-      country: req?.geo?.country ?? '',
+      city: city ?? '',
+      country: country ?? '',
     }),
     attachments: [
       {

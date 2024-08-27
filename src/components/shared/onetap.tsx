@@ -19,8 +19,6 @@ const OnetapRoot = ({ clientId }: { clientId: string }) => {
 
   useEffect(() => {
     if (isInitialized.current) return;
-    console.log(session, status);
-
     const callback = (response: CredentialResponse) => {
       void (async () => {
         setGoogleSignInLoading(true);

@@ -25,8 +25,9 @@ function IP(req?: NextRequest) {
 const getLocation = async (req: NextRequest | undefined) => {
   if (!req) throw new Error('Request not found');
 
-  const { city, country } = req.geo ?? {};
-  if (!city || !country) {
+  const city = headers().get('X-City');
+  const country = headers().get('X-Country');
+  if (!city || !country || city === '' || country === '') {
     const data = await fetch(`https://ipapi.co/${IP(req)}/json/`, {
       cache: 'no-cache',
     });
@@ -48,8 +49,6 @@ export const sendMail = async (params: EmailParams) => {
   const transport = createTransport(provider.server);
 
   const { city, country } = await getLocation(req);
-
-  console.log(IP(req), city, country, 'from send-mail.ts');
 
   const result = await transport.sendMail({
     to: identifier,
@@ -153,7 +152,7 @@ function html(params: {
             <p style="font-size:14px;line-height:24px;margin:6px 0;color:#000000">You've requested to log in to <span style="font-weight:500;">Aruu.me</span> with the following email address (<a style="color:rgb(123, 28, 240);text-decoration:none;text-decoration-line:none" target="_blank">${identifier}</a>) </p>
             <p style="font-size:14px;line-height:1.4;margin:0 0 15px;color:#000000">This link and code will only be valid for the next 15 minutes.</p>
             <hr style="width:100%;border:none;border-top:1px solid #eaeaea;border-width:1px;border-style:solid;border-color:rgb(234,234,234);margin-top:26px;margin-bottom:26px;margin-left:0px;margin-right:0px" />
-            <p style="font-size:12px;line-height:24px;margin:16px 0;color:rgb(102,102,102)">This code was sent from <span style="color:rgb(0,0,0)">${ip}</span> <!-- -->located in<!-- --> <span style="color:rgb(0,0,0)">${city}, ${country}</span>. If you were not expecting this email, you can ignore this email.</p>
+            <p style="font-size:12px;line-height:24px;margin:16px 0;color:rgb(102,102,102)">This code was sent from <span style="color:rgb(0,0,0)">${ip}</span>${city !== '' && country !== '' ? ` <!-- -->located in<!-- --> <span style="color:rgb(0,0,0)">${city}, ${country}</span>` : ''}. If you were not expecting this email, you can ignore this email.</p>
             <p style="font-size:12px;line-height:24px;margin:16px 0;color:rgb(102,102,102)"><a href="https://aruu.me" style="color:rgb(0, 0, 0);text-decoration:none;font-size:12px" target="_blank">aruu.me®</a> 2024</p>
           </td>
         </tr>

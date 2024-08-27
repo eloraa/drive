@@ -2,13 +2,13 @@ import { cn } from '@/lib/utils';
 import { forwardRef } from 'react';
 
 type LoaderProps = {
-  clasName?: string,
+  className?: string,
 };
 export const Loader = forwardRef<SVGSVGElement, LoaderProps>(
-  ({ clasName, ...props }, ref) => (
+  ({ className, ...props }, ref) => (
     <svg
       ref={ref}
-      className={cn('h-11 w-11', clasName)}
+      className={cn('h-11 w-11', className)}
       viewBox='0 0 100 100'
       {...props}
     >

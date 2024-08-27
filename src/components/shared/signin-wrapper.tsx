@@ -21,6 +21,7 @@ const Signin = () => {
     if (session && window.opener && window.opener !== window) {
       const openerWindow = window.opener as Window & {
         onLoginSuccess?: () => void;
+        onLoginError?: () => void;
       };
       if (openerWindow.onLoginSuccess) {
         openerWindow.onLoginSuccess();

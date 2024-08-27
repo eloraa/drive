@@ -149,7 +149,7 @@ export const authOptions = (
     EmailProvider({
       type: 'email',
       server: env.EMAIL_SERVER,
-      from: env.EMAIL_FROM,
+      from: `${env.EMAIL_SENDER_NAME} <${env.EMAIL_FROM}>`,
       maxAge: Number(env.MAGIC_LINK_MAX_AGE),
       sendVerificationRequest: (params) => sendMail({ req, res, ...params }),
     }),
@@ -215,7 +215,5 @@ export const authOptions = (
   ],
 });
 
-export const getServerAuthSession = (
-  req?: NextRequest,
-  res?: NextResponse,
-) => getServerSession(authOptions(req, res));
+export const getServerAuthSession = (req?: NextRequest, res?: NextResponse) =>
+  getServerSession(authOptions(req, res));

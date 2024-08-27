@@ -2,6 +2,12 @@ import type { SendVerificationRequestParams } from 'next-auth/providers/email';
 import { createTransport } from 'nodemailer';
 import { headers } from 'next/headers';
 import type { NextRequest, NextResponse } from 'next/server';
+import { env } from '@/env';
+
+interface Geo {
+  country: string;
+  city: string;
+}
 
 function IP(req?: NextRequest) {
   const FALLBACK_IP_ADDRESS = '0.0.0.0';
@@ -16,27 +22,43 @@ function IP(req?: NextRequest) {
   return headers().get('x-real-ip') ?? FALLBACK_IP_ADDRESS;
 }
 
+const getLocation = async (req: NextRequest | undefined) => {
+  if (!req) throw new Error('Request not found');
+
+  const { city, country } = req.geo ?? {};
+  if (!city || !country) {
+    const data = await fetch(`https://ipapi.co/${IP(req)}/json/`, {
+      cache: 'no-cache',
+    });
+    const json = (await data.json()) as Geo;
+    return { city: json.city, country: json.country };
+  }
+
+  return { city, country };
+};
+
 interface EmailParams extends SendVerificationRequestParams {
   req?: NextRequest;
   res?: NextResponse;
 }
 
 export const sendMail = async (params: EmailParams) => {
-  console.log('sending mail', params);
-
   const { identifier, url, provider, req } = params;
   const { host } = new URL(url);
   const transport = createTransport(provider.server);
 
+  const { city, country } = await getLocation(req);
+
   const result = await transport.sendMail({
     to: identifier,
     from: provider.from,
+    replyTo: env.EMAIL_REPLY_TO,
     subject: `Sign in to Aruu.me`,
     text: text({
       url,
       ip: IP(req),
-      city: req?.geo?.city ?? '',
-      country: req?.geo?.country ?? '',
+      city: city ?? '',
+      country: country ?? '',
       identifier,
     }),
     html: html({

@@ -26,6 +26,8 @@ export const env = createEnv({
     GOOGLE_CLIENT_SECRET: z.string(),
     EMAIL_SERVER: z.string(),
     EMAIL_FROM: z.string(),
+    EMAIL_REPLY_TO: z.string(),
+    EMAIL_SENDER_NAME: z.string(),
     MAGIC_LINK_MAX_AGE: z.string().default(String(15 * 60)),
   },
 
@@ -51,6 +53,8 @@ export const env = createEnv({
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     EMAIL_SERVER: process.env.EMAIL_SERVER,
     EMAIL_FROM: process.env.EMAIL_FROM,
+    EMAIL_REPLY_TO: process.env.EMAIL_REPLY_TO,
+    EMAIL_SENDER_NAME: process.env.EMAIL_SENDER_NAME,
     MAGIC_LINK_MAX_AGE: process.env.MAGIC_LINK_MAX_AGE,
   },
   /**

@@ -26,6 +26,7 @@ export const env = createEnv({
     GOOGLE_CLIENT_SECRET: z.string(),
     EMAIL_SERVER: z.string(),
     EMAIL_FROM: z.string(),
+    MAGIC_LINK_MAX_AGE: z.string().default(String(15 * 60)),
   },
 
   /**
@@ -50,6 +51,7 @@ export const env = createEnv({
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     EMAIL_SERVER: process.env.EMAIL_SERVER,
     EMAIL_FROM: process.env.EMAIL_FROM,
+    MAGIC_LINK_MAX_AGE: process.env.MAGIC_LINK_MAX_AGE,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

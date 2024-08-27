@@ -12,11 +12,13 @@ export const Signin = () => {
   const [isEmail, setIsEmail] = useState(false);
   const sendMagicLink = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    // const target = e.target as HTMLFormElement;
-    // const email = target.email.value as string;
-    // if (!email) return;
+    const target = e.target as HTMLFormElement;
+    const email = target.email.value as string;
+    if (!email) return;
 
-    // void signIn('email', { email });
+    console.log('email', email);
+
+    void signIn('email', { email, redirect: false });
   };
 
   useEffect(() => {

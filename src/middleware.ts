@@ -5,7 +5,8 @@ import { PUBLIC_ROUTE } from './constant';
 export default async function middleware(req: NextRequest) {
   const token = await getToken({ req });
   const session = req.cookies.get('next-auth.session-token');
-  const isAuthenticated = !!token || !!session;
+  const secureSession = req.cookies.get('__Secure-next-auth.session-token');
+  const isAuthenticated = !!token || !!session || !!secureSession;
 
   if (req.nextUrl.pathname.startsWith('/google-signin')) {
     return NextResponse.next();

@@ -20,14 +20,10 @@ import {
   users,
   verificationTokens,
 } from '@/server/db/schema';
-import {
-  decode,
-  encode,
-  type JWT,
-  type JWTDecodeParams,
-  type JWTEncodeParams,
-} from 'next-auth/jwt';
+import { decode, encode } from 'next-auth/jwt';
 import { v4 as uuidv4 } from 'uuid';
+import { sendMail } from '@/lib/send-mail';
+import type { NextRequest, NextResponse } from 'next/server';
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -68,7 +64,10 @@ function parseCookies(cookieHeader: string): Record<string, string> {
   ) as Record<string, string>;
 }
 
-export const authOptions: NextAuthOptions = {
+export const authOptions = (
+  req?: NextRequest,
+  res?: NextResponse,
+): NextAuthOptions => ({
   callbacks: {
     session: ({ session, user }) => ({
       ...session,
@@ -134,6 +133,7 @@ export const authOptions: NextAuthOptions = {
   },
   pages: {
     signIn: '/signin',
+    verifyRequest: '/signin',
   },
   adapter: DrizzleAdapter(db, {
     usersTable: users,
@@ -147,8 +147,11 @@ export const authOptions: NextAuthOptions = {
       clientSecret: env.GOOGLE_CLIENT_SECRET,
     }),
     EmailProvider({
+      type: 'email',
       server: env.EMAIL_SERVER,
       from: env.EMAIL_FROM,
+      maxAge: Number(env.MAGIC_LINK_MAX_AGE),
+      sendVerificationRequest: (params) => sendMail({ req, res, ...params }),
     }),
     CredentialsProvider({
       id: 'googleonetap',
@@ -210,6 +213,9 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
-};
+});
 
-export const getServerAuthSession = () => getServerSession(authOptions);
+export const getServerAuthSession = (
+  req?: NextRequest,
+  res?: NextResponse,
+) => getServerSession(authOptions(req, res));

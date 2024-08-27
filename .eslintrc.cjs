@@ -56,5 +56,6 @@ const config = {
       },
     ],
   },
+  ignorePatterns: ['email.html'],
 };
 module.exports = config;

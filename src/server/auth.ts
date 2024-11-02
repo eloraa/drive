@@ -134,6 +134,7 @@ export const authOptions = (
   pages: {
     signIn: '/signin',
     verifyRequest: '/signin',
+    error: '/signin',
   },
   adapter: DrizzleAdapter(db, {
     usersTable: users,

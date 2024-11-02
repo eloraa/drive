@@ -7,6 +7,14 @@ export default async function middleware(req: NextRequest) {
   const session = req.cookies.get('next-auth.session-token');
   const secureSession = req.cookies.get('__Secure-next-auth.session-token');
   const isAuthenticated = !!token || !!session || !!secureSession;
+  try {
+    const res = await fetch(req.url, { cache: 'no-cache' });
+    if (!res.ok) {
+      return NextResponse.next();
+    }
+  } catch (error) {
+    console.error('Error in middleware:', error);
+  }
 
   if (req.nextUrl.pathname.startsWith('/api/auth/signin/email')) {
     const newHeader = new Headers(req.headers);

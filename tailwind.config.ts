@@ -85,12 +85,22 @@ const config = {
             strokeDasharray: '200 200',
           },
         },
+        marquee: {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-100%)' },
+        },
+        fontWeight: {
+          '0%': { fontWeight: '100' },
+          '100%': { fontWeight: '900' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         loading:
           'loading-color 4.8s linear infinite, loading-spacing 1.2s ease-in infinite',
+        marquee: 'marquee 15s linear infinite',
+        fontWeight: 'fontWeight 1s ease-in infinite alternate',
       },
     },
   },
